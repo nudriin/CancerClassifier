@@ -19,12 +19,13 @@ import org.tensorflow.lite.task.core.vision.ImageProcessingOptions
 import org.tensorflow.lite.task.vision.classifier.Classifications
 import org.tensorflow.lite.task.vision.classifier.ImageClassifier
 import java.lang.IllegalStateException
+import java.util.concurrent.ScheduledThreadPoolExecutor
 
 
 class ImageClassifierHelper(
     var threshold: Float = 0.1f,
     var maxResults: Int = 3,
-    val modelName: String = "1.tflite",
+    val modelName: String = "cancer_classification.tflite",
     val context: Context,
     val classifierListener: ClassifierListener?
 ) {
@@ -73,13 +74,17 @@ class ImageClassifierHelper(
 
         val imageProcessingOptions = ImageProcessingOptions.builder().build()
 
-        var inferenceTime = SystemClock.uptimeMillis()
-        val results = imageClassifier?.classify(tensorImage, imageProcessingOptions)
-        inferenceTime = SystemClock.uptimeMillis() - inferenceTime
-        classifierListener?.onResults(
-            results,
-            inferenceTime
-        )
+        val executors = ScheduledThreadPoolExecutor(1)
+
+        executors.execute{
+            var inferenceTime = SystemClock.uptimeMillis()
+            val results = imageClassifier?.classify(tensorImage, imageProcessingOptions)
+            inferenceTime = SystemClock.uptimeMillis() - inferenceTime
+            classifierListener?.onResults(
+                results,
+                inferenceTime
+            )
+        }
     }
 
     private fun uriToBitmap(imageUri: Uri): Bitmap? {
