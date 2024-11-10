@@ -3,11 +3,9 @@ package com.dicoding.asclepius.helper
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.Image
 import android.net.Uri
 import android.os.SystemClock
 import android.util.Log
-import android.view.Surface
 import com.dicoding.asclepius.R
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.common.ops.CastOp
@@ -23,9 +21,9 @@ import java.util.concurrent.ScheduledThreadPoolExecutor
 
 
 class ImageClassifierHelper(
-    var threshold: Float = 0.1f,
-    var maxResults: Int = 3,
-    val modelName: String = "cancer_classification.tflite",
+    private var threshold: Float = 0.1f,
+    private var maxResults: Int = 3,
+    private val modelName: String = "cancer_classification.tflite",
     val context: Context,
     val classifierListener: ClassifierListener?
 ) {
@@ -98,15 +96,6 @@ class ImageClassifierHelper(
         } catch (e: Exception){
             e.printStackTrace()
             null
-        }
-    }
-
-    private fun getOrientationFromRotation(rotation: Int): ImageProcessingOptions.Orientation {
-        return when (rotation) {
-            Surface.ROTATION_270 -> ImageProcessingOptions.Orientation.BOTTOM_RIGHT
-            Surface.ROTATION_180 -> ImageProcessingOptions.Orientation.RIGHT_BOTTOM
-            Surface.ROTATION_90 -> ImageProcessingOptions.Orientation.TOP_LEFT
-            else -> ImageProcessingOptions.Orientation.RIGHT_TOP
         }
     }
 
