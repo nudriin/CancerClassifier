@@ -8,9 +8,13 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import com.dicoding.asclepius.R
 import com.dicoding.asclepius.databinding.ActivityMainBinding
 import com.dicoding.asclepius.helper.ImageClassifierHelper
+import com.yalantis.ucrop.UCrop
 import org.tensorflow.lite.task.vision.classifier.Classifications
+import java.io.File
 import java.text.NumberFormat
 
 class MainActivity : AppCompatActivity() {
@@ -44,10 +48,42 @@ class MainActivity : AppCompatActivity() {
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         if (uri != null) {
-            currentImageUri = uri
-            showImage()
+            startCrop(uri)
         } else {
             Log.d("Photo Picker", "No media selected")
+        }
+    }
+
+    private fun startCrop(uri: Uri) {
+        val destinationUri = Uri.fromFile(File(cacheDir, "cropped_${System.currentTimeMillis()}.jpg"))
+
+        val uCrop = UCrop.of(uri, destinationUri)
+            .withAspectRatio(1f, 1f)
+            .withMaxResultSize(1080, 1080)
+            .withOptions(UCrop.Options().apply {
+                setCompressionQuality(80)
+                setHideBottomControls(false)
+                setFreeStyleCropEnabled(true)
+                setToolbarColor(ContextCompat.getColor(this@MainActivity, R.color.white))
+                setStatusBarColor(ContextCompat.getColor(this@MainActivity, R.color.white))
+                setToolbarTitle("Crop Image")
+            })
+
+        cropLauncher.launch(uCrop.getIntent(this))
+    }
+
+    private val cropLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val resultUri = UCrop.getOutput(result.data!!)
+            if (resultUri != null) {
+                currentImageUri = resultUri
+                showImage()
+            }
+        } else if (result.resultCode == UCrop.RESULT_ERROR) {
+            val cropError = UCrop.getError(result.data!!)
+            showToast("Crop error: ${cropError?.message}")
         }
     }
 
