@@ -13,7 +13,6 @@ import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.task.core.BaseOptions
-import org.tensorflow.lite.task.core.vision.ImageProcessingOptions
 import org.tensorflow.lite.task.vision.classifier.Classifications
 import org.tensorflow.lite.task.vision.classifier.ImageClassifier
 import java.lang.IllegalStateException
@@ -70,13 +69,11 @@ class ImageClassifierHelper(
                 TensorImage.fromBitmap(uriToBitmap(imageUri))
             )
 
-        val imageProcessingOptions = ImageProcessingOptions.builder().build()
-
         val executors = ScheduledThreadPoolExecutor(1)
 
         executors.execute{
             var inferenceTime = SystemClock.uptimeMillis()
-            val results = imageClassifier?.classify(tensorImage, imageProcessingOptions)
+            val results = imageClassifier?.classify(tensorImage)
             inferenceTime = SystemClock.uptimeMillis() - inferenceTime
             classifierListener?.onResults(
                 results,
