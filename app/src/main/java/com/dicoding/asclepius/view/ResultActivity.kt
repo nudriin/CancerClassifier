@@ -15,11 +15,13 @@ class ResultActivity : AppCompatActivity() {
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val imageUri = Uri.parse((intent.getStringExtra(EXTRA_IMAGE_URI)))
+        val imageUri = Uri.parse(intent.getStringExtra(EXTRA_IMAGE_URI))
+        val analyzeResult = intent.getStringExtra(EXTRA_RESULT)
         imageUri.let {
             Log.d("Image URI", "showImage: $it")
             binding.resultImage.setImageURI(it)
         }
+        binding.resultText.text = analyzeResult
     }
 
     companion object {
