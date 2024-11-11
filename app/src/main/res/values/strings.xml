@@ -4,4 +4,9 @@
     <string name="analyze">Analyze</string>
     <string name="result">Hasil Analisis</string>
     <string name="image_classifier_failed">Failed to initialize image classifier. See error logs for details</string>
+    <string name="cancer_detection">Cancer Detection</string>
+    <string name="powered_by">Developed by nudriin</string>
+    <string name="welcome">Selamat Datang!</string>
+    <string name="upload">Upload gambar anda</string>
+    <string name="preview">Preview</string>
 </resources>
