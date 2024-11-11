@@ -16,15 +16,18 @@ class ResultActivity : AppCompatActivity() {
 
         val imageUri = Uri.parse(intent.getStringExtra(EXTRA_IMAGE_URI))
         val analyzeResult = intent.getStringExtra(EXTRA_RESULT)
+        val analyzeResultCategory = intent.getStringExtra(EXTRA_CATEGORY)
         imageUri.let {
             Log.d("Image URI", "showImage: $it")
             binding.resultImage.setImageURI(it)
         }
+        binding.categoryResult.text = analyzeResultCategory
         binding.resultText.text = analyzeResult
     }
 
     companion object {
         const val EXTRA_IMAGE_URI = "extra_image_uri"
         const val EXTRA_RESULT = "extra_result"
+        const val EXTRA_CATEGORY = "extra_category"
     }
 }
