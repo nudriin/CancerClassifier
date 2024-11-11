@@ -9,4 +9,5 @@
     <string name="welcome">Selamat Datang!</string>
     <string name="upload">Upload gambar anda</string>
     <string name="preview">Preview</string>
+    <string name="category">Category</string>
 </resources>

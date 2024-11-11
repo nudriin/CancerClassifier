@@ -4,5 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="dark">#1B1B1B</color>
     <color name="lime">#C7FF24</color>
+    <color name="muted">#EEF4FC</color>
     <color name="secondary">#EEF4FC</color>
 </resources>
