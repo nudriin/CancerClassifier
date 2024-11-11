@@ -109,9 +109,10 @@ class MainActivity : AppCompatActivity() {
                             val sortedCategories =
                                 it[0].categories.sortedByDescending { it?.score }
                             val analyzeResult = sortedCategories[0].let {
-                                "${it.label} " + NumberFormat.getPercentInstance().format(it.score).trim()
+                                NumberFormat.getPercentInstance().format(it.score).trim()
                             }
-                            moveToResult(analyzeResult)
+                            val analyzeCategory = sortedCategories[0].label
+                            moveToResult(analyzeResult, analyzeCategory)
                         }
                     }
                 }
@@ -119,9 +120,10 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun moveToResult(result: String) {
+    private fun moveToResult(result: String, category: String) {
         val intent = Intent(this, ResultActivity::class.java)
         intent.putExtra(ResultActivity.EXTRA_IMAGE_URI, currentImageUri.toString())
+        intent.putExtra(ResultActivity.EXTRA_CATEGORY, category)
         intent.putExtra(ResultActivity.EXTRA_RESULT, result)
         startActivity(intent)
     }
